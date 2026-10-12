@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0a0b">
+<title>MPT-MSK References &amp; Reading Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0b; --surface:#121214; --surface-2:#17171a; --surface-3:#1d1d21;
+    --border:rgba(255,255,255,0.09); --border-strong:rgba(255,255,255,0.18);
+    --text:#ececef; --dim:#9a9aa2; --dimmer:#66666e;
+    --accent:#d4a73a; --accent-soft:rgba(212,167,58,0.12);
+    --ok:#4ea36b; --ok-soft:rgba(78,163,107,0.12);
+    --fix:#d98a2b; --fix-soft:rgba(217,138,43,0.12);
+    --flag:#d15a5a; --flag-soft:rgba(209,90,90,0.12);
+    --font-body:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+    --font-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);
+    font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .layout{display:grid;grid-template-columns:264px minmax(0,1fr);min-height:100vh}
+  .sidebar{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;
+    background:var(--surface);border-right:1px solid var(--border);padding:24px 20px;display:flex;flex-direction:column;gap:18px}
+  .brand .name{font-weight:700;font-size:15px}
+  .brand .sub{font-family:var(--font-mono);font-size:10.5px;color:var(--dimmer);letter-spacing:.12em;text-transform:uppercase}
+  .lbl{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dimmer);margin:4px 0 8px}
+  .navlist{display:flex;flex-direction:column;gap:2px}
+  .navlist a{display:flex;flex-direction:column;padding:8px 10px;border-radius:8px;color:var(--dim);text-decoration:none}
+  .navlist a:hover{background:var(--surface-2);color:var(--text)}
+  .navlist .nt{font-family:var(--font-mono);font-size:11px;color:var(--accent)}
+  .navlist .nn{font-size:12.5px}
+  .side-foot{margin-top:auto;font-family:var(--font-mono);font-size:11px;color:var(--dimmer)}
+  main{padding:44px clamp(20px,4vw,64px) 140px;min-width:0;max-width:1000px}
+  .hero h1{font-size:clamp(28px,4vw,42px);line-height:1.06;letter-spacing:-.025em;margin:0 0 14px;font-weight:700}
+  .kicker{font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:0 0 12px}
+  .hero p{color:var(--dim);max-width:72ch}
+  .legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:20px;font-family:var(--font-mono);font-size:11.5px;color:var(--dim)}
+  .legend span{display:inline-flex;align-items:center;gap:8px}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .dot.ok{background:var(--ok)} .dot.fix{background:var(--fix)} .dot.flag{background:var(--flag)}
+  h2{font-size:21px;letter-spacing:-.01em}
+  section{margin-top:48px;scroll-margin-top:20px}
+  .paper__head{display:flex;align-items:baseline;gap:16px;padding-bottom:12px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+  .paper__tag{font-family:var(--font-mono);font-size:11px;color:var(--accent);letter-spacing:.12em}
+  .paper__head h2{margin:0;font-size:19px;font-weight:600;flex:1;min-width:220px}
+  .cards{display:grid;gap:12px;margin-top:16px}
+  .topic{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px}
+  .topic h3{margin:0 0 8px;font-size:15.5px;font-weight:600}
+  .reads{margin:0;padding-left:18px;color:var(--dim)}
+  .reads li{margin:3px 0;font-size:14px}
+  .ref-list{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+  .ref{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:start;
+    background:var(--surface);border:1px solid var(--border);border-left-width:3px;border-radius:10px;padding:12px 16px}
+  .ref.ok{border-left-color:var(--ok)} .ref.fix{border-left-color:var(--fix)} .ref.flag{border-left-color:var(--flag)}
+  .ref__n{font-family:var(--font-mono);font-size:12px;color:var(--dimmer);padding-top:2px}
+  .ref__cite{font-size:14px;line-height:1.5}
+  .ref__body .note{font-size:12.5px;color:var(--dim);margin-top:5px}
+  .ref.fix .note{color:var(--fix)} .ref.flag .note{color:var(--flag)}
+  .badge{font-family:var(--font-mono);font-size:10px;padding:2px 8px;border-radius:6px;white-space:nowrap;align-self:start;margin-top:2px}
+  .badge--ok{background:var(--ok-soft);color:var(--ok)}
+  .badge--fix{background:var(--fix-soft);color:var(--fix)}
+  .badge--flag{background:var(--flag-soft);color:var(--flag)}
+  details{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:16px;background:var(--surface)}
+  summary{padding:14px 20px;cursor:pointer;font-weight:600;font-size:15px;list-style:none;display:flex;gap:10px;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:'\25B8';color:var(--accent);transition:transform .15s}
+  details[open] summary::before{transform:rotate(90deg)}
+  .details__body{padding:6px 20px 20px;border-top:1px solid var(--border)}
+  .callout{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:8px;padding:14px 18px;margin-top:22px;font-size:14px;color:var(--text)}
+  footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:11.5px;color:var(--dimmer);line-height:1.8}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{position:static;height:auto}
+    main{padding:24px 16px 100px}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><div class="name">MPT&#8209;MSK References</div><div class="sub">Syllabus &amp; reading guide</div></div>
+    <nav>
+      <div class="lbl">Papers</div>
+      <div class="navlist"><a href="#paper-i"><span class="nt">Paper I</span><span class="nn">Fundamentals in Physiotherapy Practice</span></a><a href="#paper-ii"><span class="nt">Paper II</span><span class="nn">Fundamental Principles of Musculoskeletal Physiotherapy</span></a><a href="#paper-iii"><span class="nt">Paper III</span><span class="nn">Physical and Functional Diagnosis in Musculoskeletal Disorders</span></a><a href="#paper-iv"><span class="nt">Paper IV</span><span class="nn">Physiotherapy Interventions in Musculoskeletal Disorders</span></a></div>
+    </nav>
+    <nav>
+      <div class="lbl">Reference lists</div>
+      <div class="navlist">
+        <a href="#ref-paper-1"><span class="nt">Paper I</span><span class="nn">15 references</span></a>
+        <a href="#ref-msk"><span class="nt">MSK</span><span class="nn">43 books + 22 journals</span></a>
+      </div>
+    </nav>
+    <div class="side-foot"><a href="index.html">&larr; Back to checklist</a></div>
+  </aside>
+
+  <main>
+    <header class="hero">
+      <p class="kicker">Full syllabus references</p>
+      <h1>References &amp; where to read them</h1>
+      <p>Every reference named in the MPT&#8209;MSK syllabus, per paper, alongside a topic&#8209;by&#8209;topic map to the exact textbook chapter. Each reference was checked against the publisher / catalogue record; corrections and current editions are noted.</p>
+      <div class="legend">
+        <span><span class="dot ok"></span> verified as cited</span>
+        <span><span class="dot fix"></span> corrected / updated</span>
+        <span><span class="dot flag"></span> could not be verified</span>
+      </div>
+    </header>
+
+    <div class="callout"><b>How this was checked.</b> The topic&#8594;chapter mapping and the bibliography were independently re-verified against each book's table of contents and index, then corrected where the syllabus edition was superseded or a citation was inaccurate. Chapter titles are stable across editions &mdash; when studying an older edition, match by chapter title, not number.</div>
+
+    
+    <section class="paper" id="paper-i">
+      <div class="paper__head"><span class="paper__tag">Paper I</span><h2>Fundamentals in Physiotherapy Practice, Pedagogy and Research</h2></div>
+      <div class="cards"><article class="topic"><h3>Principles of Physiotherapy Practice</h3><ul class="reads"><li>World Physiotherapy - Standards of Physical Therapy Practice (policy document)</li><li>World Physiotherapy - Description of Physical Therapy (policy statement)</li></ul></article>
+<article class="topic"><h3>Core Professional Values &amp; Research Ethics</h3><ul class="reads"><li>World Physiotherapy - Standards of Physical Therapy Practice</li><li>ICMR National Ethical Guidelines (2017)</li><li>ICMR Policy on Research Integrity and Publication Ethics (2019)</li></ul></article>
+<article class="topic"><h3>Research Methodology and Biostatistics</h3><ul class="reads"><li>Hulley et al. - Designing Clinical Research: study-design and biostatistics chapters</li><li>Indrayan &amp; Malhotra - Medical Biostatistics: descriptive statistics; hypothesis testing</li></ul></article>
+<article class="topic"><h3>Exercise Physiology</h3><ul class="reads"><li>McArdle, Katch &amp; Katch - Exercise Physiology: energy transfer; nutrition; training adaptations</li><li>ACSM's Resource Manual - Ch 3 Exercise Physiology</li></ul></article>
+<article class="topic"><h3>Electrophysiology</h3><ul class="reads"><li>Kimura - Electrodiagnosis in Diseases of Nerve and Muscle: electrical properties of nerve and muscle; peripheral nerve; EMG</li></ul></article>
+<article class="topic"><h3>Pedagogy in Physiotherapy Education</h3><ul class="reads"><li>Singh, Gupta &amp; Singh - Principles of Medical Education: learning theories; intended learning outcomes; assessment</li></ul></article>
+<article class="topic"><h3>Management, Entrepreneurship and Leadership</h3><ul class="reads"><li>Page - Management in Physical Therapy Practices: managers and leaders; management responsibilities; fiscal/marketing (entrepreneurship)</li></ul></article></div>
+    </section>
+    <section class="paper" id="paper-ii">
+      <div class="paper__head"><span class="paper__tag">Paper II</span><h2>Fundamental Principles of Musculoskeletal Physiotherapy</h2></div>
+      <div class="cards"><article class="topic"><h3>Basic Concepts of Musculoskeletal System</h3><ul class="reads"><li>Nordin &amp; Frankel - Biomechanics of Bone, Articular Cartilage, Tendons &amp; Ligaments, Skeletal Muscle</li><li>Levangie &amp; Norkin - Ch 1-3 (biomechanical applications, joint design, muscle structure)</li></ul></article>
+<article class="topic"><h3>Basic Concepts of Anthropometry</h3><ul class="reads"><li>ACSM's Resource Manual - Body Composition Status and Assessment</li></ul></article>
+<article class="topic"><h3>Basic Concepts of Biomechanics</h3><ul class="reads"><li>Nordin &amp; Frankel - Ch 1 Introduction to Biomechanics: Basic Terminology and Concepts</li><li>Brunnstrom's Clinical Kinesiology - Ch 1 Kinematics; Ch 2 Mechanical Principles: Kinetics</li><li>Levangie &amp; Norkin - Ch 1 Biomechanical Applications to Joint Structure and Function</li></ul></article>
+<article class="topic"><h3>Biomechanics of Movement across Life Span</h3><ul class="reads"><li>Nordin &amp; Frankel - Ch 18 Biomechanics of Gait (CORRECTED: there is no general 'posture' chapter; Ch 19 covers indigenous postures)</li><li>Brunnstrom's Clinical Kinesiology - Ch 12 Stance and Gait (has the 'Developmental Aspects of Gait: Life Span Changes' section)</li></ul></article>
+<article class="topic"><h3>Physiological Basis of Human Movement</h3><ul class="reads"><li>McArdle, Katch &amp; Katch - Exercise Physiology: energy systems; neural control of movement</li><li>ACSM's Resource Manual - Ch 3 Exercise Physiology</li></ul></article>
+<article class="topic"><h3>Mechanics and Pathomechanics of Joints</h3><ul class="reads"><li>Nordin &amp; Frankel - Part 2 Biomechanics of Joints (knee, hip, foot/ankle, spine, shoulder, elbow, wrist/hand)</li><li>Levangie &amp; Norkin - joint chapters (vertebral column, TMJ, shoulder, elbow, wrist/hand, hip, knee, ankle/foot)</li><li>Hertling &amp; Kessler - Ch 3 Arthrology</li></ul></article>
+<article class="topic"><h3>Posture</h3><ul class="reads"><li>Levangie &amp; Norkin - Ch 13 Posture</li><li>Magee - Assessment of Posture</li><li>Brunnstrom's Clinical Kinesiology - Ch 12 Stance and Gait (stance posture and postural sway)</li></ul></article>
+<article class="topic"><h3>Gait and Function</h3><ul class="reads"><li>Levangie &amp; Norkin - Ch 14 Gait</li><li>Magee - Assessment of Gait</li><li>Nordin &amp; Frankel - Ch 18 Biomechanics of Gait</li></ul></article>
+<article class="topic"><h3>Pain</h3><ul class="reads"><li>Hertling &amp; Kessler - Ch 4 Chronic Pain Management in the Adult</li><li>O'Sullivan &amp; Schmitz - Chronic Pain chapter</li><li>Magee - Ch 1 Principles and Concepts (pain assessment, SINSS, referred pain)</li></ul></article>
+<article class="topic"><h3>Electro Physics</h3><ul class="reads"><li>Kimura - Electrical Properties of Nerve and Muscle (note: no dedicated electrotherapy textbook is listed)</li></ul></article></div>
+    </section>
+    <section class="paper" id="paper-iii">
+      <div class="paper__head"><span class="paper__tag">Paper III</span><h2>Physical and Functional Diagnosis in Musculoskeletal Disorders</h2></div>
+      <div class="cards"><article class="topic"><h3>Assessment Fundamentals</h3><ul class="reads"><li>Magee - Ch 1 Principles and Concepts (history, observation, scanning, joint play)</li></ul></article>
+<article class="topic"><h3>Regional Screening (clearing)</h3><ul class="reads"><li>Magee - regional chapters (cervical, shoulder, lumbar, pelvis, knee, ankle/foot)</li><li>Hertling &amp; Kessler - Cervicothoracic-Upper Limb Scan Examination; Lumbosacral-Lower Limb Scan Examination</li><li>Donatelli &amp; Wooden - Ch 5 Screening for Referral</li></ul></article>
+<article class="topic"><h3>Clinical Decision-Making and Practice Models</h3><ul class="reads"><li>O'Sullivan &amp; Schmitz - Ch 1 Clinical Decision Making</li></ul></article>
+<article class="topic"><h3>Diagnosis and Investigations</h3><ul class="reads"><li>Magee - special tests (CORRECTED: these are in the regional chapters, not Ch 1)</li><li>McKinnis - Fundamentals of Musculoskeletal Imaging (modalities and by region)</li><li>Greenspan &amp; Beltran - Orthopaedic Imaging: A Practical Approach (imaging techniques; trauma)</li><li>Kimura - nerve conduction studies; EMG; entrapment syndromes</li><li>ACSM's Resource Manual - Exercise Testing section</li></ul></article>
+<article class="topic"><h3>Condition-Specific Assessment</h3><ul class="reads"><li>Magee - Assessment of the Amputee</li><li>Hoppenfeld &amp; Murthy - Bone Healing; Braces and Splints</li><li>Chui et al. - Orthotics and Prosthetics in Rehabilitation (amputation and prosthetics)</li><li>Ratliffe - Clinical Pediatric Physical Therapy (orthopedic disorders of childhood)</li><li>Saunders et al. - Hand and Upper Extremity Rehabilitation; Cooper - Fundamentals of Hand Therapy</li></ul></article>
+<article class="topic"><h3>Functional Assessment and Outcome Measures</h3><ul class="reads"><li>O'Sullivan &amp; Schmitz - Examination of Function</li><li>Cooper - Fundamentals of Hand Therapy: Assessment of Functional Outcomes</li></ul></article></div>
+    </section>
+    <section class="paper" id="paper-iv">
+      <div class="paper__head"><span class="paper__tag">Paper IV</span><h2>Physiotherapy Interventions in Musculoskeletal Disorders</h2></div>
+      <div class="cards"><article class="topic"><h3>Interventions for Physiologic Impairments</h3><ul class="reads"><li>Donatelli &amp; Wooden - Theory and Practice of Muscle Strengthening; Rehabilitation and Strength Training Concepts</li><li>O'Sullivan &amp; Schmitz - Ch 10 Strategies to Improve Motor Function (closest fit; no chapter literally titled 'physiologic impairments')</li></ul></article>
+<article class="topic"><h3>Management of Pain</h3><ul class="reads"><li>Hertling &amp; Kessler - Ch 4 Chronic Pain Management in the Adult</li><li>O'Sullivan &amp; Schmitz - Chronic Pain chapter</li></ul></article>
+<article class="topic"><h3>Methods of Musculoskeletal Rehabilitation</h3><ul class="reads"><li>Hertling &amp; Kessler - Functional Exercise (CORRECTED: Ch 5 is assessment/management concepts; technique chapters are Ch 6, 8, 9)</li><li>O'Sullivan &amp; Schmitz - Ch 10-11 (motor and locomotor strategies)</li><li>Donatelli &amp; Wooden - Defining the Core in Rehabilitation; Neuromuscular Rehabilitation</li></ul></article>
+<article class="topic"><h3>Advanced Techniques in MSK Rehabilitation (manual therapy)</h3><ul class="reads"><li>Maitland's Vertebral Manipulation - The Maitland Concept</li><li>Maitland's Peripheral Manipulation - The Maitland Concept as a clinical framework</li><li>Kaltenborn - Manual Mobilization of the Joints (translatoric joint play)</li><li>Cyriax - Illustrated Manual of Orthopaedic Medicine (principles of diagnosis and treatment)</li><li>McKenzie &amp; May - The Lumbar Spine; The Cervical and Thoracic Spine (classification; derangement; postural syndrome)</li><li>Travell, Simons &amp; Simons - Myofascial Pain and Dysfunction (trigger point manual)</li><li>Butler - Mobilisation of the Nervous System (tension testing; treatment)</li><li>Shacklock - Clinical Neurodynamics</li><li>Chaitow - Muscle Energy Techniques</li><li>Cantu &amp; Grodin - Myofascial Manipulation</li><li>Jones et al. - Jones Strain-Counterstrain</li><li>Mulligan - Manual Therapy: NAGs, SNAGs, MWMs</li><li>Grieve's Modern Manual Therapy (foundation and clinical sciences)</li></ul></article>
+<article class="topic"><h3>Electro Modalities in MSK Rehabilitation</h3><ul class="reads"><li>No dedicated electrophysical-agents textbook is in the syllabus list (partial coverage: Hoppenfeld &amp; Murthy - Modalities Used in the Treatment of Fractures)</li></ul></article>
+<article class="topic"><h3>Ergonomics</h3><ul class="reads"><li>No dedicated ergonomics textbook is in the syllabus list (partial coverage: ACSM's Resource Manual - Occupational and Functional Assessments)</li></ul></article>
+<article class="topic"><h3>Trauma Rehabilitation</h3><ul class="reads"><li>Hoppenfeld &amp; Murthy - foundation chapters + regional fracture chapters</li><li>Clinical Orthopaedic Rehabilitation - region/injury rehab protocols</li><li>Maxey &amp; Magnusson - Rehabilitation for the Postsurgical Orthopedic Patient</li></ul></article></div>
+    </section>
+
+    <section id="ref-paper-1">
+      <div class="paper__head"><span class="paper__tag">PAPER I</span><h2>Reference list</h2></div>
+      <ul class="ref-list"><li class="ref ok"><div class="ref__n">1</div><div class="ref__body"><div class="ref__cite">World Physiotherapy (2019). Description of Physical Therapy: Policy Statement.</div><div class="note">Issued by WCPT (renamed 'World Physiotherapy' in 2020); re-approved 2023.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">2</div><div class="ref__body"><div class="ref__cite">World Physiotherapy (2011). Physical Therapist Professional Entry Level Education Guideline.</div><div class="note">Official title: WCPT guideline for physical therapist professional entry level education.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref fix"><div class="ref__n">3</div><div class="ref__body"><div class="ref__cite">CSP (2011). Physiotherapy Framework.</div><div class="note">Full title: Physiotherapy Framework: putting physiotherapy behaviours, values, knowledge &amp; skills into practice (updated May 2020).</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref fix"><div class="ref__n">4</div><div class="ref__body"><div class="ref__cite">Expected Minimum Competencies for an Entry Level Physiotherapist in the Europe Region.</div><div class="note">Published by the Europe Region of World Physiotherapy (ER-WCPT), 2022.</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref ok"><div class="ref__n">5</div><div class="ref__body"><div class="ref__cite">Sackett DL, Straus SE, Richardson WS, Rosenberg W, Haynes RB. Evidence-Based Medicine: How to Practice and Teach EBM (2nd ed). Churchill Livingstone, 2000.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">6</div><div class="ref__body"><div class="ref__cite">Herbert R, Jamtvedt G, Hagen KB, Mead J. Practical Evidence-Based Physiotherapy (2nd ed). Churchill Livingstone, 2011.</div><div class="note">A 3rd edition (Herbert, Jamtvedt, Hagen, Elkins; Elsevier, 2022) now exists.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">7</div><div class="ref__body"><div class="ref__cite">World Physiotherapy (2011). Standards of Physical Therapy Practice Guideline.</div><div class="note">Official title: WCPT guideline for standards of physical therapy practice.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">8</div><div class="ref__body"><div class="ref__cite">ICMR (2017). National Ethical Guidelines for Biomedical and Health Research involving Human Participants.</div><div class="note">Released 12 October 2017.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref fix"><div class="ref__n">9</div><div class="ref__body"><div class="ref__cite">ICMR (2020). Policy on Research Integrity and Publication Ethics (RIPE).</div><div class="note">CORRECTED: the RIPE policy was released in 2019, not 2020.</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref ok"><div class="ref__n">10</div><div class="ref__body"><div class="ref__cite">Hulley SB, Cummings SR, Browner WS, Grady DG, Newman TB. Designing Clinical Research (4th ed). LWW, 2013.</div><div class="note">A 5th edition (Browner et al., 2022) now exists.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">11</div><div class="ref__body"><div class="ref__cite">Indrayan A, Malhotra RK. Medical Biostatistics (4th ed). Chapman &amp; Hall/CRC, 2017.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">12</div><div class="ref__body"><div class="ref__cite">McArdle WD, Katch FI, Katch VL. Exercise Physiology: Nutrition, Energy, and Human Performance (8th ed). LWW, 2015.</div><div class="note">A 9th edition exists.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">13</div><div class="ref__body"><div class="ref__cite">Singh T, Gupta P, Singh D. Principles of Medical Education (4th ed). Jaypee, 2013.</div><div class="note">Author order: Tejinder Singh, Piyush Gupta, Daljit Singh. A 5th edition exists.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">14</div><div class="ref__body"><div class="ref__cite">Page CG. Management in Physical Therapy Practices (2nd ed). F.A. Davis, 2015.</div><div class="note">No dedicated entrepreneurship chapter; business content sits in the marketing and fiscal chapters.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref fix"><div class="ref__n">15</div><div class="ref__body"><div class="ref__cite">Thornton HA. Current thinking on Leadership and Physiotherapy Practice. Report for the Chartered Society of Physiotherapy, c.2016.</div><div class="note">CORRECTED: the author is Dr Heather A. Thornton; it is a CSP-commissioned report, not a book/journal.</div></div><span class="badge badge--fix">corrected</span></li></ul>
+    </section>
+
+    <section id="ref-msk">
+      <div class="paper__head"><span class="paper__tag">PAPERS II&ndash;IV</span><h2>Musculoskeletal reference list</h2></div>
+      <p style="color:var(--dim);max-width:72ch">The syllabus gives one shared MSK reference list for Papers II, III and IV.</p>
+      <details open><summary>Textbooks (43 entries)</summary><div class="details__body"><ul class="ref-list"><li class="ref ok"><div class="ref__n">1</div><div class="ref__body"><div class="ref__cite">Nordin M, Frankel VH (eds). Basic Biomechanics of the Musculoskeletal System. LWW, 2001.</div><div class="note">Current edition: 5th ed (2021).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">2</div><div class="ref__body"><div class="ref__cite">Levangie PK, Norkin CC. Joint Structure and Function: A Comprehensive Analysis. 2011.</div><div class="note">Current edition: 6th ed (2019), with co-author Lewek MD. F.A. Davis.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref fix"><div class="ref__n">3</div><div class="ref__body"><div class="ref__cite">Lehmkuhl LD, Smith LK. Brunnstrom's Clinical Kinesiology. Davis, 1984.</div><div class="note">CORRECTED: the current 6th ed (2012, F.A. Davis) is by Houglum PA &amp; Bertoti DB; Lehmkuhl &amp; Smith authored the 5th ed (1996).</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref ok"><div class="ref__n">4</div><div class="ref__body"><div class="ref__cite">Magee DJ. Orthopedic Physical Assessment. Elsevier, 2014.</div><div class="note">Current edition: 7th ed (2021), with co-author Manske RC.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">5</div><div class="ref__body"><div class="ref__cite">Donatelli RA, Wooden MJ. Orthopaedic Physical Therapy. Elsevier, 2009.</div><div class="note">4th ed (2009) is the latest.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">6</div><div class="ref__body"><div class="ref__cite">Reese NB, Bandy WD. Joint Range of Motion and Muscle Length Testing. Elsevier, 2016.</div><div class="note">3rd ed (2016) is the latest.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref fix"><div class="ref__n">7</div><div class="ref__body"><div class="ref__cite">Hislop H, Avers D, Brown M. Daniels and Worthingham's Muscle Testing. Elsevier, 2013.</div><div class="note">CORRECTED: the current 10th ed (2019) is by Avers D &amp; Brown M; Hislop/Avers/Brown authored the 9th ed (2013).</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref ok"><div class="ref__n">8</div><div class="ref__body"><div class="ref__cite">McKinnis LN. Fundamentals of Musculoskeletal Imaging. F.A. Davis, 2013.</div><div class="note">Current edition: 5th ed (2021).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">9</div><div class="ref__body"><div class="ref__cite">Greenspan A, Beltran J. Orthopaedic Imaging: A Practical Approach. LWW, 2020.</div><div class="note">7th ed (2020). An 8th ed (2025) is by Greenspan &amp; Grainger. US spelling: 'Orthopedic Imaging'.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">10</div><div class="ref__body"><div class="ref__cite">O'Sullivan SB, Schmitz TJ. Physical Rehabilitation. F.A. Davis, 2006.</div><div class="note">Current edition: 7th ed (2019), with co-author Fulk GD.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref fix"><div class="ref__n">11</div><div class="ref__body"><div class="ref__cite">McCarty DJ, Koopman WJ. Arthritis and Allied Conditions: A Textbook of Rheumatology. Lea &amp; Febiger, 1993.</div><div class="note">CORRECTED: the current 15th ed (2005) is edited by Koopman WJ &amp; Moreland LW; McCarty &amp; Koopman edited the 12th ed (1993).</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref ok"><div class="ref__n">12</div><div class="ref__body"><div class="ref__cite">ACSM's Resource Manual for Guidelines for Exercise Testing and Prescription. LWW, 2012.</div><div class="note">7th ed (2013) is the latest.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">13</div><div class="ref__body"><div class="ref__cite">Maxey L, Magnusson J. Rehabilitation for the Postsurgical Orthopedic Patient. Elsevier, 2013.</div><div class="note">3rd ed (2013) is the latest.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref fix"><div class="ref__n">14</div><div class="ref__body"><div class="ref__cite">Wilk KE / Brotzman SB, Daugherty K. Clinical Orthopaedic Rehabilitation. Mosby, 2003.</div><div class="note">CORRECTED: the current 4th ed (2018, 'A Team Approach') is edited by Giangarra CE &amp; Manske RC; Brotzman &amp; Wilk edited the 2nd ed (2003).</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref ok"><div class="ref__n">15</div><div class="ref__body"><div class="ref__cite">Hertling D, Kessler RM. Management of Common Musculoskeletal Disorders. LWW, 2006.</div><div class="note">Full title: ...Physical Therapy Principles and Methods. 4th ed (2005) is the latest.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">16</div><div class="ref__body"><div class="ref__cite">Hoppenfeld S, Murthy VL. Treatment and Rehabilitation of Fractures. LWW, 2000.</div><div class="note">A 2nd ed (2022, Horwitz &amp; Suk) exists.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">17</div><div class="ref__body"><div class="ref__cite">Kimura J. Electrodiagnosis in Diseases of Nerve and Muscle. 1984.</div><div class="note">Full title: ...Principles and Practice. Current: 4th ed (2013, Oxford University Press).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">18</div><div class="ref__body"><div class="ref__cite">Chui KC, Jorge M, Yen SC, Lusardi MM. Orthotics and Prosthetics in Rehabilitation. Elsevier, 2019.</div><div class="note">4th ed (2020).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">19</div><div class="ref__body"><div class="ref__cite">Ratliffe KT. Clinical Pediatric Physical Therapy. Mosby, 1998.</div><div class="note">Full title: ...A Guide for the Physical Therapy Team. No later edition.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">20</div><div class="ref__body"><div class="ref__cite">Saunders R, Astifidis R, Burke SL, Higgins J, McClinton MA. Hand and Upper Extremity Rehabilitation. Elsevier, 2015.</div><div class="note">Full title: ...A Practical Guide. 4th ed (2016) is the latest.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">21</div><div class="ref__body"><div class="ref__cite">Cooper C. Fundamentals of Hand Therapy. Elsevier, 2014.</div><div class="note">2nd ed (2014). Current 4th ed is titled 'Cooper's Fundamentals of Hand Therapy' (Wietlisbach &amp; Wolff).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref fix"><div class="ref__n">22</div><div class="ref__body"><div class="ref__cite">Burns YR, MacDonald J. Cyriax's Illustrated Manual of Orthopaedic Medicine.</div><div class="note">Listed twice (items 22 and 23). Single title: Cyriax JH &amp; Cyriax PJ, 3rd ed, Butterworth-Heinemann, 1996.</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref ok"><div class="ref__n">23</div><div class="ref__body"><div class="ref__cite">McKenzie R, May S. The Lumbar Spine: Mechanical Diagnosis and Therapy. 2003.</div><div class="note">2nd ed (2003), two volumes, Spinal Publications.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref fix"><div class="ref__n">24</div><div class="ref__body"><div class="ref__cite">McKenzie R. The Cervical and Thoracic Spine: Mechanical Diagnosis and Therapy. 1990.</div><div class="note">CORRECTED: current 2nd ed (2006) is co-authored by McKenzie R &amp; May S.</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref ok"><div class="ref__n">25</div><div class="ref__body"><div class="ref__cite">Butler DS, Jones MA. Mobilisation of the Nervous System. Elsevier, 1991.</div><div class="note">Butler DS is the author (1991); Jones MA contributed a chapter, not co-authorship.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">26</div><div class="ref__body"><div class="ref__cite">Shacklock M. Clinical Neurodynamics. Elsevier, 2005.</div><div class="note">Full title: ...A New System of Neuromusculoskeletal Treatment.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">27</div><div class="ref__body"><div class="ref__cite">Mulligan B. Manual Therapy: NAGs, SNAGs, MWMs (5th edn). 2004.</div><div class="note">Official title includes ', etc.'. Current: 7th ed.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">28</div><div class="ref__body"><div class="ref__cite">Jones LH, Kusunose R, Goering E. Jones Strain-Counterstrain. 1995.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">29</div><div class="ref__body"><div class="ref__cite">Cantu RI, Grodin AJ. Myofascial Manipulation: Theory and Clinical Application. Aspen, 2001.</div><div class="note">2nd ed (2001) is the latest.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">30</div><div class="ref__body"><div class="ref__cite">Travell JG, Simons DG. Myofascial Pain and Dysfunction: The Trigger Point Manual. LWW, 1983.</div><div class="note">2nd ed Vol 1 (1999). A 3rd ed (2019, Donnelly et al.) exists.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">31</div><div class="ref__body"><div class="ref__cite">Spoerl JJ, Mottice M, Benner EK. Soft Tissue Mobilization Techniques. JEMD, 1994.</div><div class="note">Self-published (JEMD Publications), 2nd ed 1994.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">32</div><div class="ref__body"><div class="ref__cite">Chaitow L, Crenshaw K. Muscle Energy Techniques. Elsevier, 2006.</div><div class="note">Chaitow L is the author; Crenshaw K is a contributor. Current: 5th ed, 'Chaitow's Muscle Energy Techniques' (2023).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref fix"><div class="ref__n">33</div><div class="ref__body"><div class="ref__cite">Banks K, Newton M. Maitland's Peripheral Manipulation. Elsevier, 2014.</div><div class="note">CORRECTED: the 5th ed (2013) is edited by Hengeveld E &amp; Banks K; Newton M is a chapter author.</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref fix"><div class="ref__n">34</div><div class="ref__body"><div class="ref__cite">Maitland GD, Hengeveld E, Banks K, English K. Maitland's Vertebral Manipulation. Butterworth, 2005.</div><div class="note">CORRECTED: the 8th ed (2013) is edited by Hengeveld E &amp; Banks K; Maitland GD is the originator.</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref ok"><div class="ref__n">35</div><div class="ref__body"><div class="ref__cite">Kaltenborn FM. The Spine: Basic Evaluation and Mobilization Techniques. Norli, 1993.</div><div class="note">Superseded by 'Manual Mobilization of the Joints, Vol. II: The Spine'.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">36</div><div class="ref__body"><div class="ref__cite">Kaltenborn FM, Evjenth O, Kaltenborn TB, Morgan D, Vollowitz E. Manual Mobilization of the Joints, Vol II: The Spine. Norli, 2003.</div><div class="note">Current: 7th ed (2018).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref fix"><div class="ref__n">37</div><div class="ref__body"><div class="ref__cite">Twomey LT. Grieve's Modern Manual Therapy. Boyling JD, Jull GA. Churchill Livingstone, 2004.</div><div class="note">CORRECTED: 3rd ed (2004) edited by Boyling JD &amp; Jull GA (Twomey wrote the foreword). Current 4th ed (2015) is retitled 'Grieve's Modern Musculoskeletal Physiotherapy'.</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref ok"><div class="ref__n">38</div><div class="ref__body"><div class="ref__cite">Macdonald R. Taping Techniques: Principles and Practice. Butterworth-Heinemann, 2004.</div><div class="note">Also listed: Hewetson TJ, Austin K, Gwynn-Brett K, Marshall S. An Illustrated Guide to Taping Techniques (2nd ed, Mosby, 2009).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">39</div><div class="ref__body"><div class="ref__cite">Gatterman MI. Foundations of Chiropractic: Subluxation. Elsevier, 2005.</div><div class="note">2nd ed (2005) is the latest.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">40</div><div class="ref__body"><div class="ref__cite">Haldeman S. Principles and Practice of Chiropractic. McGraw-Hill, 2004.</div><div class="note">3rd ed (2005).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref fix"><div class="ref__n">41</div><div class="ref__body"><div class="ref__cite">Ward RC, Jerome JA. Foundations of Osteopathic Medicine. Williams and Wilkins, 1997.</div><div class="note">CORRECTED: the current 3rd ed (2011, LWW) is edited by Chila AG; Ward &amp; Jerome edited the 1st ed (1997).</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref ok"><div class="ref__n">42</div><div class="ref__body"><div class="ref__cite">DiGiovanna EL, Schiowitz S, Dowling DJ. An Osteopathic Approach to Diagnosis and Treatment. LWW, 2005.</div><div class="note">3rd ed (2005).</div></div><span class="badge badge--ok">verified</span></li></ul></div></details>
+      <details><summary>Journals (22 entries)</summary><div class="details__body"><ul class="ref-list"><li class="ref ok"><div class="ref__n">1</div><div class="ref__body"><div class="ref__cite">Journal of Orthopaedic &amp; Sports Physical Therapy (JOSPT).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">2</div><div class="ref__body"><div class="ref__cite">Journal of Physiotherapy (Australian Physiotherapy Association; Elsevier).</div><div class="note">Formerly Australian Journal of Physiotherapy.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">3</div><div class="ref__body"><div class="ref__cite">Archives of Physical Medicine and Rehabilitation (Elsevier).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">4</div><div class="ref__body"><div class="ref__cite">Physiotherapy (Chartered Society of Physiotherapy; Elsevier).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">5</div><div class="ref__body"><div class="ref__cite">Physical Therapy (APTA; now 'PTJ: Physical Therapy &amp; Rehabilitation Journal', Oxford).</div><div class="note">Rebranded in 2021.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">6</div><div class="ref__body"><div class="ref__cite">International Journal of Physiotherapy (IJPHY, India).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref fix"><div class="ref__n">7</div><div class="ref__body"><div class="ref__cite">Physiotherapy Practice.</div><div class="note">CORRECTED: the journal is 'Physiotherapy Practice and Research' (IOS Press).</div></div><span class="badge badge--fix">corrected</span></li>
+<li class="ref ok"><div class="ref__n">8</div><div class="ref__body"><div class="ref__cite">Musculoskeletal Science and Practice (Elsevier).</div><div class="note">Formerly 'Manual Therapy'.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">9</div><div class="ref__body"><div class="ref__cite">International Biomechanics (Taylor &amp; Francis).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">10</div><div class="ref__body"><div class="ref__cite">Journal of Strength and Conditioning Research (NSCA; LWW).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">11</div><div class="ref__body"><div class="ref__cite">Chiropractic &amp; Manual Therapies (BioMed Central).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">12</div><div class="ref__body"><div class="ref__cite">Journal of Hand Therapy (ASHT; Elsevier).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">13</div><div class="ref__body"><div class="ref__cite">Musculoskeletal Care (Wiley).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">14</div><div class="ref__body"><div class="ref__cite">Strength and Conditioning Journal (NSCA; LWW).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">15</div><div class="ref__body"><div class="ref__cite">Shoulder &amp; Elbow (SAGE).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">16</div><div class="ref__body"><div class="ref__cite">Journal of Back and Musculoskeletal Rehabilitation (IOS Press).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">17</div><div class="ref__body"><div class="ref__cite">Journal of Manual &amp; Manipulative Therapy (Taylor &amp; Francis).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">18</div><div class="ref__body"><div class="ref__cite">Manual Therapy (Elsevier).</div><div class="note">Ceased under this title after 2016; renamed 'Musculoskeletal Science and Practice'.</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref flag"><div class="ref__n">19</div><div class="ref__body"><div class="ref__cite">Journal of Manual Medicine.</div><div class="note">FLAG: not verifiable as stated; closest title is 'Manuelle Medizin - European Journal of Manual Medicine' (Springer).</div></div><span class="badge badge--flag">check</span></li>
+<li class="ref ok"><div class="ref__n">20</div><div class="ref__body"><div class="ref__cite">Journal of Orthopaedics, Trauma and Rehabilitation (SAGE).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">21</div><div class="ref__body"><div class="ref__cite">Gait &amp; Posture (Elsevier).</div></div><span class="badge badge--ok">verified</span></li>
+<li class="ref ok"><div class="ref__n">22</div><div class="ref__body"><div class="ref__cite">Physiotherapy - Journal of the Indian Association of Physiotherapists.</div></div><span class="badge badge--ok">verified</span></li></ul></div></details>
+    </section>
+
+    <footer>
+      Compiled from the MPT&#8209;MSK syllabus (RGUHS) reference list, cross&#8209;checked against publisher and catalogue records.<br>
+      Corrections reflect the current editions and official titles; the syllabus citation is shown as given.
+    </footer>
+  </main>
+</div>
+</body>
+</html>
